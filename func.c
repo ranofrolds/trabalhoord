@@ -265,23 +265,23 @@ int imprime_ped(){
     }
 
     //aloca o primeiro rrn (o topo da ped)
-    rrn=malloc(sizeof(int));
-    if(rrn==NULL){
+    rrn=malloc(sizeof(int)); //aloca na memoria um espaço de tamanho int
+    if(rrn==NULL){ //se não tiver espaço retorna NULL
         return EXIT_FAILURE;
     }
     rrn[0]=topo_ped;
-    found++;
+    found++; 
     
     while(rrn[found-1]!= -1){
         j=0;
-        memset(aux1,0,strlen(aux1));
+        memset(aux1,0,strlen(aux1)); //resetar os valores da string aux1
         fseek(arq, rrn[found-1]*TAM+sizeof(int), SEEK_SET);  //reposiciona o indicador para o proximo registro(rrn)
         fread(&aux, sizeof(char), 1, arq ); //le o primeiro byte, se for (*), entao o registro foi removido previamente
         if(aux=='*'){   
             fseek(arq, rrn[found-1]*TAM+sizeof(int)+2*sizeof(char), SEEK_SET);
             // vai ler o rrn do *|2|, a partir do numero em si, ate encontrar a ultima pipe
             aux1[j]=fgetc(arq);
-            while(aux1[j]!='|'){
+            while(aux1[j]!='|'){ //pra ler o rrn até o pipe
                 j++;
                 aux1[j]=fgetc(arq);
             }
@@ -295,7 +295,7 @@ int imprime_ped(){
             fprintf(stderr,ANSI_COLOR_RED"Ocorreu algum erro!!"ANSI_COLOR_RESET);
         }
     }
-
+    
     printf("Topo da Ped ="ANSI_COLOR_YELLOW" %d\n"ANSI_COLOR_RESET, rrn[0]);
     free_space=TAM; //quantidade de espaco disponivel apenas para o topo da ped
     printf("Proximos RRNs da PED:\n");
@@ -311,6 +311,7 @@ int imprime_ped(){
     printf(ANSI_COLOR_GREEN"\nEspaco disponivel: "ANSI_COLOR_YELLOW"[%d]"ANSI_COLOR_RESET, free_space);
 
     free(rrn);
+    fclose(arq);
     return EXIT_SUCCESS;
 }
 
